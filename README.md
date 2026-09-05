@@ -1,4 +1,6 @@
-# 🎓 Student Portal API
+# 🎓 Student Portal API 
+
+Article Link : https://kaphaaya.substack.com/p/i-built-a-backend-student-portal
 
 A simple REST API I built for my Backend Development assignment.
 
