@@ -1,90 +1,81 @@
 # 🎓 Student Portal API
 
-A simple REST API for managing student accounts, built as part of my Backend Development assignment.
+A simple REST API I built for my Backend Development assignment.
 
-This project helped me understand how a backend application receives requests, processes them, communicates with a database, and sends responses back to the client.
+The goal was to build a Student Portal where students can create an account, view their details, update their name, and delete their account.
 
-I built the API using **Node.js, Express.js, MongoDB, and Mongoose**.
+I built this project using **Node.js, Express.js, MongoDB, and Mongoose**.
 
----
-
-## 🚀 What I Built
-
-The Student Portal API allows students to:
-
-* 👤 Create a student account
-* 🔎 Get their own student details using their ID
-* ✏️ Update their name
-* 🗑️ Delete their account
-
-The API follows the basic **CRUD** pattern:
-
-| Operation | HTTP Method | Endpoint        | Purpose                   |
-| --------- | ----------- | --------------- | ------------------------- |
-| Create    | `POST`      | `/students`     | Create a student          |
-| Read      | `GET`       | `/students/:id` | Get a student by ID       |
-| Update    | `PUT`       | `/students/:id` | Update the student's name |
-| Delete    | `DELETE`    | `/students/:id` | Delete a student          |
+This project also helped me understand how the different parts of a backend application work together instead of just writing code that "works."
 
 ---
 
-## 🧠 What I Learned
+## 🚀 What This API Does
 
-This assignment was not just about making the API work. I used it to understand what is actually happening behind the scenes.
+The Student Portal API supports the four basic CRUD operations:
 
-### 🌐 REST API
+| Operation | HTTP Method | Endpoint        | What it does               |
+| --------- | ----------- | --------------- | -------------------------- |
+| 🟢 Create | `POST`      | `/students`     | Creates a student account  |
+| 🔵 Read   | `GET`       | `/students/:id` | Gets a student's details   |
+| 🟡 Update | `PUT`       | `/students/:id` | Updates the student's name |
+| 🔴 Delete | `DELETE`    | `/students/:id` | Deletes a student account  |
 
-I learned that an API is basically a way for different applications to communicate.
+---
 
-For example, when I send a request from Postman:
+# 🧠 What I Learned Building This
+
+Before building this project, CRUD sounded more complicated than it actually is.
+
+The basic idea is:
 
 ```text
-POST /students
+CREATE → Add something
+READ   → Get something
+UPDATE → Change something
+DELETE → Remove something
 ```
 
-I am basically saying:
+For this project, the "something" is a **student**.
 
-> "Hey backend, I want to create a new student."
+So:
 
-The backend receives the request, processes the information, talks to MongoDB, and sends a response back.
+```text
+POST   → Create a student
+GET    → Read a student
+PUT    → Update a student
+DELETE → Delete a student
+```
 
 ---
 
-## 🛠️ Technologies Used
+# 🏗️ Project Architecture
 
-### Node.js
+The final structure of my backend is:
 
-Node.js allows JavaScript to run outside the browser.
-
-I used it to run my backend application.
-
-### Express.js
-
-Express makes it easier to build routes and handle HTTP requests.
-
-For example:
-
-```js
-router.get('/:id', ...)
+```text
+Postman / Client
+       ↓
+     Routes
+       ↓
+   Controllers
+       ↓
+      Model
+       ↓
+    MongoDB
 ```
 
-tells Express what to do when someone sends a GET request containing a student ID.
+### In simple language
 
-### MongoDB 🍃
+I think of the backend like a restaurant 🍽️:
 
-MongoDB is the database where the student information is stored.
+* **Postman** is the customer placing an order.
+* **Routes** are the receptionist or waiter who receives the request.
+* **Controllers** are the people who actually handle the request.
+* **Models** are the rules or blueprint for the data.
+* **MongoDB** is where the information is stored.
 
-Instead of keeping the data only in my application while it is running, MongoDB allows the information to persist.
-
-### Mongoose
-
-Mongoose connects my Node.js application to MongoDB and gives me an easier way to work with the student data.
-
-### Postman
-
-I used Postman to test my API endpoints before submitting the project.
-
-This allowed me to send POST, GET, PUT, and DELETE requests and see the responses from my backend.
+This separation makes the application easier to understand and maintain.
 
 ---
 
@@ -98,6 +89,9 @@ student-portal-api/
 │   ├── config/
 │   │   └── database.mjs
 │   │
+│   ├── controllers/
+│   │   └── studentController.mjs
+│   │
 │   ├── models/
 │   │   └── student.mjs
 │   │
@@ -106,41 +100,46 @@ student-portal-api/
 │   │
 │   └── server.mjs
 │
+├── screenshots/
+│   ├── create-student.png
+│   ├── get-student.png
+│   ├── update-student.png
+│   ├── delete-student.png
+│   ├── server:active.png
+│   ├── server:running.png
+│   ├── server:mongodb:active.png
+│   ├── studentportal:postman.png
+│   └── Installs.png
+│
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
 └── README.md
 ```
 
-### What each file does
+---
 
-#### `server.mjs`
+# 📂 Understanding the Folders
 
-This is where the Express server starts.
+## `config/` ⚙️
 
-It also:
+This contains the database connection.
 
-* Loads environment variables
-* Connects to MongoDB
-* Enables JSON request bodies
-* Registers the student routes
-* Starts the server on port `3000`
+### `database.mjs`
+
+This file connects my Node.js application to MongoDB using Mongoose.
+
+I separated the database connection from the server because I don't want everything living inside one giant file.
 
 ---
 
-#### `database.mjs`
+## `models/` 📋
 
-This file is responsible for connecting the application to MongoDB.
+### `student.mjs`
 
-I kept the database connection separate from the main server file so the project is easier to organize and maintain.
+This contains the Student model.
 
----
-
-#### `student.mjs`
-
-This contains the **Student model**.
-
-The model defines the information a student account should contain:
+The model defines the information a student should have:
 
 ```text
 Name
@@ -148,21 +147,129 @@ Registration Number
 Email
 ```
 
-Think of the model as a blueprint for what a student record should look like.
+I think of the model as a **blueprint**.
+
+If I'm building a house, the blueprint tells me what the house should look like.
+
+The Student model does something similar for student data.
 
 ---
 
-#### `studentRoutes.mjs`
+## `routes/` 🛣️
 
-This contains the API routes for managing students.
+### `studentRoutes.mjs`
 
-This is where I implemented the CRUD operations.
+This file defines the API endpoints.
+
+The routes answer the question:
+
+> "When this type of request comes in, where should it go?"
+
+For example:
+
+```js
+router.post('/', createStudent);
+```
+
+means:
+
+> When someone sends a POST request to `/students`, send it to the `createStudent` controller.
+
+The route itself doesn't need to contain all the database logic anymore.
+
+---
+
+## `controllers/` 🧠
+
+### `studentController.mjs`
+
+This is where the actual work happens.
+
+It contains the logic for:
+
+```text
+createStudent
+getStudent
+updateStudent
+deleteStudent
+```
+
+### Why did I add a controller?
+
+Initially, the CRUD logic was directly inside my routes.
+
+That works for a small project, but it can become messy as an application grows.
+
+For example, imagine having:
+
+```text
+Student routes
+Teacher routes
+Course routes
+Department routes
+Authentication routes
+```
+
+If all the logic is inside the routes, those files can become very long.
+
+So I separated the responsibilities.
+
+Now:
+
+```text
+Routes → Direct the request
+Controllers → Handle the logic
+Models → Handle the data structure
+Database → Stores the data
+```
+
+This makes the code easier to organize and maintain.
+
+---
+
+# 🍃 MongoDB
+
+I used **MongoDB** as the database for this project.
+
+MongoDB stores information as documents.
+
+A student document can look like:
+
+```json
+{
+  "name": "Aisha Bello",
+  "registrationNumber": "CSC/001",
+  "email": "aisha@gmail.com"
+}
+```
+
+MongoDB also generates an `_id` for each student.
+
+That ID is important because it allows the API to identify a specific student.
+
+---
+
+# 🔌 Mongoose
+
+I used **Mongoose** to communicate between my Node.js application and MongoDB.
+
+In simple terms:
+
+```text
+Node.js
+   ↓
+Mongoose
+   ↓
+MongoDB
+```
+
+Mongoose makes it easier for my application to work with MongoDB documents and models.
 
 ---
 
 # 🔐 Environment Variables
 
-The MongoDB connection string is stored inside a `.env` file instead of being written directly into the source code.
+My MongoDB connection string is stored in a `.env` file.
 
 Example:
 
@@ -170,23 +277,23 @@ Example:
 MONGO_URI=your_mongodb_connection_string
 ```
 
-The `.env` file is included in `.gitignore`.
+I did not hard-code my database credentials into my application.
 
-This is important because my MongoDB credentials should **never be uploaded to GitHub**.
+The `.env` file is also included in `.gitignore`.
+
+This means my MongoDB password is not pushed to GitHub. 🔒
 
 ---
 
-# 🔄 API Endpoints
+# 🟢 1. CREATE Student
 
-## 1️⃣ Create a Student
-
-### Request
+### Endpoint
 
 ```http
 POST /students
 ```
 
-### Body
+### Request body
 
 ```json
 {
@@ -196,32 +303,19 @@ POST /students
 }
 ```
 
-The API sends the information to MongoDB and creates a student record.
+The API receives the information and sends it to the Student model, which creates the student in MongoDB.
 
-### Response
+MongoDB then gives the student a unique `_id`.
 
-MongoDB generates a unique `_id` for the student.
-
-Example:
-
-```json
-{
-  "_id": "6a9c5f26894ea184edb040cd",
-  "name": "Aisha Bello",
-  "registrationNumber": "CSC/001",
-  "email": "aisha@gmail.com"
-}
-```
-
-📸 **POST request**
+### Screenshot
 
 ![Create Student](screenshots/create-student.png)
 
 ---
 
-# 2️⃣ Get Student Details
+# 🔵 2. GET Student
 
-### Request
+### Endpoint
 
 ```http
 GET /students/:id
@@ -233,33 +327,43 @@ Example:
 GET /students/6a9c5f26894ea184edb040cd
 ```
 
-The `:id` is a route parameter.
+The `:id` is a **route parameter**.
 
-I learned that:
+Inside the controller, I can access it using:
 
 ```js
 req.params.id
 ```
 
-allows the application to access the ID supplied in the URL.
+The API uses that ID to find the student in MongoDB.
 
-The API then uses that ID to find the student in MongoDB.
+If the student doesn't exist, the API returns:
 
-📸 **GET request**
+```json
+{
+  "message": "Student not found"
+}
+```
+
+### Screenshot
 
 ![Get Student](screenshots/get-student.png)
 
 ---
 
-# 3️⃣ Update Student Name
+# 🟡 3. UPDATE Student
 
-### Request
+### Endpoint
 
 ```http
 PUT /students/:id
 ```
 
-### Body
+The assignment had an important restriction:
+
+> Students can only update their name.
+
+So the request body is:
 
 ```json
 {
@@ -267,33 +371,33 @@ PUT /students/:id
 }
 ```
 
-One important requirement of the assignment was that the student should **only be able to change their name**.
-
-So I specifically extracted only the `name` from the request:
+The controller only takes the `name` from the request:
 
 ```js
 const { name } = req.body;
 ```
 
-Then I updated only that field in MongoDB.
+and updates only that field.
 
-This means:
+Therefore:
 
 ```text
 Name                 ✅ Can change
-Registration Number  🔒 Remains unchanged
-Email                🔒 Remains unchanged
+Registration Number  🔒 Cannot change
+Email                🔒 Cannot change
 ```
 
-📸 **UPDATE request**
+This was one of the important requirements I had to make sure the API followed.
+
+### Screenshot
 
 ![Update Student](screenshots/update-student.png)
 
 ---
 
-# 4️⃣ Delete Student
+# 🔴 4. DELETE Student
 
-### Request
+### Endpoint
 
 ```http
 DELETE /students/:id
@@ -305,9 +409,9 @@ Example:
 DELETE /students/6a9c5f26894ea184edb040cd
 ```
 
-The API finds the student using the ID and permanently removes the record from MongoDB.
+The controller finds the student using the ID and removes the record from MongoDB.
 
-The API returns:
+The API then responds:
 
 ```json
 {
@@ -315,146 +419,176 @@ The API returns:
 }
 ```
 
-📸 **DELETE request**
+### Screenshot
 
 ![Delete Student](screenshots/delete-student.png)
 
 ---
 
-# 🧪 Testing
+# 🧪 Testing With Postman
 
-I tested the API using Postman.
+I used Postman to test the API locally.
 
-The CRUD testing covered:
+The testing process was:
 
 ```text
-POST   → Create student       ✅
-GET    → Retrieve student     ✅
-PUT    → Update student name  ✅
-DELETE → Delete student       ✅
+POST
+ ↓
+Create student
+ ↓
+Copy MongoDB _id
+ ↓
+GET student
+ ↓
+PUT student name
+ ↓
+DELETE student
 ```
 
-I also tested the API after deleting the student by trying to retrieve the same ID again.
+I also tested the API after deletion to confirm that the student could no longer be found.
 
-The API correctly returned:
+### Test Results
 
-```json
-{
-  "message": "Student not found"
-}
+```text
+CREATE  ✅
+GET     ✅
+UPDATE  ✅
+DELETE  ✅
 ```
-
-This confirmed that the student had actually been removed.
 
 ---
 
-# 🧩 How the API Works
+# 🖥️ Running the Server
 
-The overall flow looks like this:
-
-```text
-             POSTMAN
-                │
-                ▼
-        ┌─────────────────┐
-        │   Express API   │
-        └────────┬────────┘
-                 │
-                 ▼
-        ┌─────────────────┐
-        │ Student Routes  │
-        └────────┬────────┘
-                 │
-                 ▼
-        ┌─────────────────┐
-        │ Student Model   │
-        │   Mongoose      │
-        └────────┬────────┘
-                 │
-                 ▼
-        ┌─────────────────┐
-        │    MongoDB      │
-        └─────────────────┘
-```
-
-In simple terms:
-
-**Postman asks → Express receives → Routes decide what to do → Mongoose communicates with MongoDB → MongoDB stores or retrieves the data → API sends a response back.**
-
----
-
-# ▶️ Running the Project Locally
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/kaphaaya/student-portal-api.git
-```
-
-### 2. Enter the project
-
-```bash
-cd student-portal-api
-```
-
-### 3. Install dependencies
-
-```bash
-npm install
-```
-
-### 4. Create a `.env` file
-
-Add:
-
-```text
-MONGO_URI=your_mongodb_connection_string
-```
-
-### 5. Start the server
-
-```bash
-node src/server.mjs
-```
-
-The API should run on:
+The application runs locally on:
 
 ```text
 http://localhost:3000
 ```
 
+To start the server:
+
+```bash
+node src/server.mjs
+```
+
+If the database connection is successful, the terminal shows:
+
+```text
+Server is running on http://localhost:3000
+MongoDB connected successfully
+```
+
 ---
 
-# 📚 Assignment Requirements
+# 📦 Installing Dependencies
 
-| Requirement                   | Completed |
-| ----------------------------- | --------- |
-| Create student account        | ✅         |
-| Store name                    | ✅         |
-| Store registration number     | ✅         |
-| Store email                   | ✅         |
-| Get student by ID             | ✅         |
-| Update student profile        | ✅         |
-| Only allow name to be updated | ✅         |
-| Delete student account        | ✅         |
-| MongoDB database              | ✅         |
-| REST API                      | ✅         |
-| Tested with Postman           | ✅         |
-| Source code pushed to GitHub  | ✅         |
+After cloning the project:
+
+```bash
+npm install
+```
+
+The main packages used are:
+
+* Express
+* Mongoose
+* dotenv
+
+---
+
+# 🔒 Security
+
+The following files are ignored by Git:
+
+```text
+.env
+node_modules
+.DS_Store
+```
+
+The `.env` file contains sensitive database connection information, so it should never be committed to GitHub.
+
+---
+
+# 📸 Project Screenshots
+
+## Server Running
+
+![Server Running](screenshots/server\:running.png)
+
+## MongoDB Connection
+
+![MongoDB Connection](screenshots/server\:mongodb\:active.png)
+
+## Postman
+
+![Postman](screenshots/studentportal\:postman.png)
+
+## Create Student
+
+![Create Student](screenshots/create-student.png)
+
+## Get Student
+
+![Get Student](screenshots/get-student.png)
+
+## Update Student
+
+![Update Student](screenshots/update-student.png)
+
+## Delete Student
+
+![Delete Student](screenshots/delete-student.png)
+
+---
+
+# 🎯 Assignment Requirements
+
+| Requirement                   | Status |
+| ----------------------------- | ------ |
+| Create student account        | ✅      |
+| Student name                  | ✅      |
+| Registration number           | ✅      |
+| Email address                 | ✅      |
+| Get student details by ID     | ✅      |
+| Update student profile        | ✅      |
+| Only allow name to be updated | ✅      |
+| Delete student account        | ✅      |
+| MongoDB database              | ✅      |
+| REST API                      | ✅      |
+| Postman testing               | ✅      |
+| GitHub repository             | ✅      |
+| Controller structure          | ✅      |
 
 ---
 
 # 💭 Final Reflection
 
-This project gave me a much better understanding of what happens behind a backend API.
+This project helped me understand that building a backend is not just about making an endpoint return a response.
 
-At the beginning, I was mainly thinking about writing the routes and getting a response. While building this, I started understanding the bigger picture:
+I learned how the pieces connect:
 
-**Client → API → Route → Model → Database → Response**
+```text
+Client
+  ↓
+Express
+  ↓
+Routes
+  ↓
+Controllers
+  ↓
+Models
+  ↓
+MongoDB
+```
 
-I also learned how environment variables work, why database credentials should not be committed to GitHub, how route parameters work, and how CRUD operations map to HTTP methods.
+I also learned why separating these responsibilities matters.
 
-Most importantly, I learned by actually building and debugging the API instead of just reading about it.
+At first, I had the CRUD logic directly inside the routes. Later, I introduced a controller layer so that the routes could focus on directing requests while the controllers handled the actual work.
+
+I also got practical experience with MongoDB, Mongoose, environment variables, route parameters, Postman testing, Git, and GitHub.
+
+Most importantly, I built the API while learning what each part actually does instead of just copying a finished project.
 
 🚀 **Student Portal API completed.**
-
